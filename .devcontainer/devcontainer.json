@@ -1,6 +1,7 @@
 {
 	"name": "Gatekeeper Snap",
-	"dockerComposeFile": "docker-compose.yml",
+    "dockerComposeFile": "docker-compose.yml",
+	"service": "snap-dev",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 	},

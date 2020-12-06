@@ -1,12 +1,8 @@
 version: '3'
 services:
-  authserverdev:
-      build:
-        context: .
-        dockerfile: Dockerfile
+  snap-dev:
+      image: ghcr.io/getgatekeeper/gatekeeper-snap-dev:main
       volumes:
         - .:/workspace:cached
+        - /var/run/docker.sock:/var/run/docker-host.sock
       command: /bin/sh -c "while sleep 1000; do :; done"
-      ports:
-        - 80:80
-        - 443:443

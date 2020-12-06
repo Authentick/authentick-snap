@@ -1,26 +1,37 @@
-#
-# This dockerfile is based upon https://github.com/ogra1/snapd-docker
-#
-FROM ubuntu:18.04
-ENV container docker
+FROM debian:10
 
-ENV PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+LABEL org.opencontainers.image.source https://github.com/GetGatekeeper/gatekeeper-snap
 
-ENV LANG C.UTF-8
-
-ENV LC_ALL C.UTF-8
-
-RUN apt-get update && \
- DEBIAN_FRONTEND=noninteractive \
- apt-get install -y fuse snapd snap-confine squashfuse sudo && \
- apt-get clean && \
- dpkg-divert --local --rename --add /sbin/udevadm && \
- ln -s /bin/true /sbin/udevadm
-
-RUN systemctl enable snapd
-
-VOLUME ["/sys/fs/cgroup"]
-
-STOPSIGNAL SIGRTMIN+3
-
-CMD ["/sbin/init"]
+RUN apt-get update && apt-get install -y \
+       vim \
+       zsh \
+       iputils-ping \
+       dnsutils \
+       telnet \
+       netcat \
+       procps \
+       lsof \
+       apt-transport-https \
+       ca-certificates \
+       curl \
+       gnupg \
+       gnupg-agent \
+       software-properties-common \
+       htop \
+    && curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
+    && if [ "$(uname -m)" = 'x86_64' ]; then \
+        add-apt-repository \
+        "deb [arch=amd64] https://download.docker.com/linux/debian \
+        $(lsb_release -cs) \
+        stable"; \
+       else \
+        add-apt-repository \
+        "deb [arch=arm64] https://download.docker.com/linux/debian \
+        $(lsb_release -cs) \
+        stable"; \
+       fi \
+    && apt-get update \
+    && apt-get install -y docker-ce docker-ce-cli containerd.io \
+    && ln -s /var/run/docker-host.sock /var/run/docker.sock  \
+    && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
+    && rm -rf /var/lib/apt/lists/*

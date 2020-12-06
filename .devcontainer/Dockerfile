@@ -1,7 +1,7 @@
 #
 # This dockerfile is based upon https://github.com/ogra1/snapd-docker
 #
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 ENV container docker
 
 ENV PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"

@@ -9,8 +9,6 @@
 	],
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"terminal.integrated.shell.linux": "/bin/zsh",
-		"stylelint.configBasedir": "Client"
 	},
 	"runArgs": [
 		"--privileged",
@@ -26,10 +24,5 @@
 	],
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"ms-dotnettools.csharp",
-		"ms-dotnettools.dotnet-interactive-vscode",
-		"ms-azuretools.vscode-docker",
-		"stylelint.vscode-stylelint"
-	],
-	"postCreateCommand": ".devcontainer/setup.sh"
+	]
 }

@@ -1,0 +1,35 @@
+{
+	"name": "AuthServer",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "authserverdev",
+	"forwardPorts": [
+		5001,
+		8080,
+		8025
+	],
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/zsh",
+		"stylelint.configBasedir": "Client"
+	},
+	"runArgs": [
+		"--privileged",
+        "--tmpfs /run",
+        "--tmpfs /run/lock",
+        "--tmpfs /tmp",
+        "--cap-add SYS_ADMIN",
+        "--device=/dev/fuse",
+        "--security-opt apparmor:unconfined",
+        "--security-opt seccomp:unconfined",
+        "-v /sys/fs/cgroup:/sys/fs/cgroup:ro",
+        "-v /lib/modules:/lib/modules:ro",
+	],
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"ms-dotnettools.csharp",
+		"ms-dotnettools.dotnet-interactive-vscode",
+		"ms-azuretools.vscode-docker",
+		"stylelint.vscode-stylelint"
+	],
+	"postCreateCommand": ".devcontainer/setup.sh"
+}

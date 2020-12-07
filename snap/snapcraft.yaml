@@ -37,7 +37,7 @@ parts:
   gatekeeper-server:
     plugin: nil
     source: https://github.com/GetGatekeeper/Server.git
-    source-commit: 082c976c0352b3856dfcdeef20e81c3bcfd66a3d
+    source-branch: main
     stage-packages:
       - dotnet-sdk-5.0
     build-packages:
@@ -68,6 +68,7 @@ parts:
     plugin: autotools
     source-type: tar
     source: https://github.com/postgres/postgres/archive/REL_12_5.tar.gz
+    source-checksum: sha512/7f68c3e6dfa88b3a66fa44bae61eb180c385e0878c7b7c6811cf909849e97f45e58b29104523f2f35a61e74a94e8fd92dcfe0080793394df5c098ea8e6e636f4
     build-packages:
       - libreadline-dev
       - zlib1g-dev

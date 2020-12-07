@@ -1,0 +1,97 @@
+name: gatekeeper
+base: core18
+version: '0.0.1-alpha'
+summary: Gatekeeper is an upcoming open-source identity management solution.
+description: |
+  Self-hosted, secure and under your control. Gatekeeper gives you a centralized 
+  identity management under your control.
+
+grade: devel
+confinement: strict
+
+system-usernames:
+  snap_daemon: shared
+
+package-repositories:
+  - type: apt
+    components: [main]
+    suites: [bionic]
+    key-id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
+    url: https://packages.microsoft.com/ubuntu/18.04/prod
+  - type: apt
+    components: [main]
+    suites: [bionic]
+    key-id: 9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280
+    url: https://deb.nodesource.com/node_13.x
+
+parts:
+  snapcraft-preload:
+      source: https://github.com/sergiusens/snapcraft-preload.git
+      source-commit: b8ed08c01c4461e69772f9230ee8d30fe2a2ea56
+      plugin: cmake
+      build-packages:
+        - on amd64:
+          - gcc-multilib
+          - g++-multilib
+
+  gatekeeper-server:
+    plugin: nil
+    source: https://github.com/GetGatekeeper/Server.git
+    source-commit: 082c976c0352b3856dfcdeef20e81c3bcfd66a3d
+    stage-packages:
+      - dotnet-sdk-5.0
+    build-packages:
+      - dotnet-sdk-5.0
+      - wget
+      - nodejs
+      - build-essential
+      - python
+    override-build: |
+      cd /root/parts/gatekeeper-server/src/Client/
+      npm install --global gulp-cli
+      npm install --save-dev --unsafe-perm
+      gulp sass
+      cd /root/parts/gatekeeper-server/src/Server/
+      dotnet publish -c Production
+      mkdir /root/prime/opt/
+      mv /root/parts/gatekeeper-server/src/Server/bin/Production/net5.0/publish/ /root/prime/opt/gatekeeper/
+
+  gatekeeper-customizations:
+    plugin: dump
+    source: src/gatekeeper-server/
+
+  postgresql-customizations:
+    plugin: dump
+    source: src/postgresql/
+
+  postgresql:
+    plugin: autotools
+    source-type: tar
+    source: https://github.com/postgres/postgres/archive/REL_12_5.tar.gz
+    build-packages:
+      - libreadline-dev
+      - zlib1g-dev
+      - flex
+      - bison
+      - libxml2-dev
+      - libxslt1-dev
+      - libssl-dev
+      - libxml2-utils
+      - xsltproc
+    stage-packages:
+      - setpriv
+
+apps:
+  gatekeeper-server:
+    command: bin/start_gatekeeper
+    daemon: simple
+    before:
+      -  postgresql
+    plugs: [network, network-bind]
+
+  postgresql:
+    command-chain:
+      - bin/snapcraft-preload
+    command: bin/start_postgresql
+    daemon: simple
+    plugs: [network, network-bind]

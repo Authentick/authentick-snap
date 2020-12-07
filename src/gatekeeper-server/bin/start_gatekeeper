@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd $SNAP/opt/gatekeeper/
+DOTNET_ROOT=$SNAP/usr/share/dotnet/ ./AuthServer.Server

@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+export LD_LIBRARY_PATH=$SNAP/lib/
+
+# Create and chown the PostgreSQL data folder
+DATA_DIR="$SNAP_DATA/pgsql/"
+mkdir "$DATA_DIR"
+chown -R snap_daemon:snap_daemon "$DATA_DIR"
+
+# Initialize PostgreSQL database
+$SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- $SNAP/bin/initdb -U postgres -D $DATA_DIR

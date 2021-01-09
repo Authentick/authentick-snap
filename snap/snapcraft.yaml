@@ -12,12 +12,6 @@ confinement: strict
 system-usernames:
   snap_daemon: shared
 
-hooks:
-    install:
-      environment:
-        LC_ALL: C.UTF-8
-        LANG: C.UTF-8
-
 package-repositories:
   - type: apt
     components: [main]

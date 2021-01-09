@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
 export LD_LIBRARY_PATH=$SNAP/lib/
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
 
 # Create and chown the PostgreSQL data folder
 DATA_DIR="$SNAP_DATA/pgsql/"

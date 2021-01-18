@@ -34,7 +34,7 @@ parts:
           - gcc-multilib
           - g++-multilib
 
-  gatekeeper-server:
+  gatekeeper-web-server:
     plugin: nil
     source: https://github.com/GetGatekeeper/Server.git
     source-branch: main
@@ -47,14 +47,28 @@ parts:
       - build-essential
       - python
     override-build: |
-      cd /root/parts/gatekeeper-server/src/Client/
+      cd /root/parts/gatekeeper-web-server/src/Gatekeeper.Client/
       npm install --global gulp-cli
       npm install --save-dev --unsafe-perm
       gulp sass
-      cd /root/parts/gatekeeper-server/src/Server/
+      cd /root/parts/gatekeeper-web-server/src/Gatekeeper.Server.Web/
       dotnet publish -c Production
-      mkdir /root/prime/opt/
-      mv /root/parts/gatekeeper-server/src/Server/bin/Production/net5.0/publish/ /root/prime/opt/gatekeeper/
+      mkdir -p /root/prime/opt/gatekeeper/web/
+      mv /root/parts/gatekeeper-web-server/src/Gatekeeper.Server.Web/bin/Production/net5.0/publish/ /root/prime/opt/gatekeeper/web/
+
+  gatekeeper-ldap-server:
+    plugin: nil
+    source: https://github.com/GetGatekeeper/Server.git
+    source-branch: main
+    stage-packages:
+      - dotnet-sdk-5.0
+    build-packages:
+      - dotnet-sdk-5.0
+    override-build: |
+      cd /root/parts/gatekeeper-ldap-server/src/Gatekeeper.Server.Ldap/
+      dotnet publish -c Production
+      mkdir -p /root/prime/opt/gatekeeper/ldap/
+      mv /root/parts/gatekeeper-ldap-server/src/Gatekeeper.Server.Ldap/bin/Production/net5.0/publish/ /root/prime/opt/gatekeeper/ldap/
 
   gatekeeper-customizations:
     plugin: dump
@@ -83,11 +97,17 @@ parts:
       - setpriv
 
 apps:
-  gatekeeper-server:
-    command: bin/start_gatekeeper
+  gatekeeper-web-server:
+    command: bin/start_gatekeeper_web
     daemon: simple
     before:
-      -  postgresql
+      - postgresql
+      - gatekeeper-ldap-server
+    plugs: [network, network-bind]
+
+  gatekeeper-ldap-server:
+    command: bin/start_gatekeeper_ldap
+    daemon: simple
     plugs: [network, network-bind]
 
   postgresql:

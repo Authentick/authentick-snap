@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd $SNAP/opt/gatekeeper/web/
+DOTNET_ROOT=$SNAP/usr/share/dotnet/ ./Gatekeeper.Server.Web

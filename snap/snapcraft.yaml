@@ -70,9 +70,13 @@ parts:
       mkdir -p /root/prime/opt/gatekeeper/ldap/
       mv /root/parts/gatekeeper-ldap-server/src/Gatekeeper.Server.Ldap/bin/Production/net5.0/publish/ /root/prime/opt/gatekeeper/ldap/
 
-  gatekeeper-customizations:
+  gatekeeper-web-customizations:
     plugin: dump
-    source: src/gatekeeper-server/
+    source: src/gatekeeper-web-server/
+
+  gatekeeper-ldap-customizations:
+    plugin: dump
+    source: src/gatekeeper-ldap-server/
 
   postgresql-customizations:
     plugin: dump

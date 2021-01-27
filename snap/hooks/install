@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export LD_LIBRARY_PATH=$SNAP/lib/
+export LD_LIBRARY_PATH=$SNAP/lib/:$SNAP/usr/local/pgsql/lib/
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 
@@ -10,4 +10,4 @@ mkdir "$DATA_DIR"
 chown -R snap_daemon:snap_daemon "$DATA_DIR"
 
 # Initialize PostgreSQL database
-$SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- $SNAP/bin/initdb -U postgres -D $DATA_DIR
+$SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- $SNAP/usr/local/pgsql/bin/initdb -U postgres -D $DATA_DIR

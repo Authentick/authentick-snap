@@ -51,6 +51,7 @@ parts:
       npm install --global gulp-cli
       npm install --save-dev --unsafe-perm
       gulp sass
+      gulp javascript
       cd /root/parts/gatekeeper-web-server/src/Gatekeeper.Server.Web/
       dotnet publish -c Production
       mkdir -p /root/prime/opt/gatekeeper/web/

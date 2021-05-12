@@ -11,7 +11,7 @@ jobs:
       id: build
       with:
         snapcraft-args: --enable-experimental-package-repositories
-    - uses: snapcore/action-publish@v1
+    - uses: snapcore/action-publish@v1.0.2
       with:
         store_login: ${{ secrets.EDGE_STORE_LOGIN }}
         snap: ${{ steps.build.outputs.snap }}
